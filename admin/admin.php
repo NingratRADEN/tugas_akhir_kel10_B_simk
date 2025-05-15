@@ -1,0 +1,35 @@
+<?php 
+session_start();
+
+// Check if user is logged in and is an admin
+if (!isset($_SESSION['id']) || $_SESSION['user_role'] !== 'admin') {
+    header("Location: ./login.php");
+}
+include "header.php";
+   
+
+   //Isi atau Content 
+    if(isset($_GET['menu'])){
+        if($_GET['menu']==1){
+            include "notifadmin.php";
+        }else if($_GET['menu']==2){
+            include "bayaradmin.php";
+        }else if($_GET['menu']==3){
+            include "pengaduanadmin.php";
+        }else if($_GET['menu']==4){
+            include "infokosadmin.php";
+        }else if($_GET['menu']==5){
+            include "profileadmin.php";
+        }
+        else{
+            echo "Pilih Menu";
+        }
+    }else{
+        include "dashboardadmin.php";
+    }
+    
+
+
+include "footer.php";
+
+?>
