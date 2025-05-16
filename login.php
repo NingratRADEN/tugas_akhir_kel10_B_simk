@@ -50,7 +50,7 @@
             </div>
             <button type="submit" class="btn btn-login btn-block">Login</button>
         </form>
-        <p class="mt-3 text-center"><a href="#" style="color: red;">Lupa Kata Sandi?</a></p>
+        <p class="mt-3 text-center"><a href="#" style="color: red;">Lupa Password?</a></p>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
