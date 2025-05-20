@@ -56,6 +56,9 @@
         </div>
 
         <div class="d-flex justify-content-between mb-4">
+            <button class="btn btn-add">
+                <i class="bi bi-plus-circle"></i> Buat Pengaduan Baru
+            </button>
             <div>
                 <button class="filter-btn active-filter">Semua</button>
                 <button class="filter-btn">Diproses</button>
@@ -76,4 +79,3 @@
         </div>
     </div>
 </div>
-

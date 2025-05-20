@@ -23,6 +23,11 @@
                     <p>Pembayaran berikutnya: 01 Februari 2025</p>
                 </div>
              </div>
+                    <button type="button" class="btn btn-pay" data-bs-toggle="modal" data-bs-target="#tambahbayar">
+                         Bayar Sewa Bulan Februari 2025
+                    </button>
+            </div>
+        </div>
 
         <div class="card">
             <div class="card-body">
@@ -64,4 +69,66 @@
             </div>
         </div>
     </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="tambahbayar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Bayar</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+            <div class="card-body p-3">
+                <h6 class="fw-bold mb-3">Informasi Tagihan</h6>
+                
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>Sewa Kamar + Uang air + Wifi</span>
+                        <span class="fw-bold">Rp. 700,000</span>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Kategori</label>
+                    <div class="dropdown">
+                        <button class="form-select form-control d-flex justify-content-between align-items-center dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            1 bulan
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">1 bulan</a></li>
+                            <li><a class="dropdown-item" href="#">3 bulan</a></li>
+                            <li><a class="dropdown-item" href="#">6 bulan</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Keterangan</label>
+                    <input type="text" class="form-control">
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Metode</label>
+                    <div class="dropdown">
+                        <button class="form-select form-control d-flex justify-content-between align-items-center dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Cash - bayar langsung pemilik kos
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Cash - bayar langsung pemilik kos</a></li>
+                            <li><a class="dropdown-item" href="#">Transfer Bank - BCA 0123456789</a></li>
+                            <li><a class="dropdown-item" href="#">Ewallet - Dana 0812345678</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Bayar</button>
+      </div>
+    </div>
+  </div>
 </div>
