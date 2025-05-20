@@ -56,8 +56,8 @@
         </div>
 
         <div class="d-flex justify-content-between mb-4">
-            <button class="btn btn-add">
-                <i class="bi bi-plus-circle"></i> Buat Pengaduan Baru
+            <button type="button" class="btn btn-add" data-bs-toggle="modal" data-bs-target="#tambahpengaduan">
+                <i class="bi bi-plus-circle"></i>Buat Pengaduan baru
             </button>
             <div>
                 <button class="filter-btn active-filter">Semua</button>
@@ -79,3 +79,40 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="tambahpengaduan" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Buat Pengaduan</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="card shadow-sm">
+                <div class="card-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="judul" class="form-label">Judul Pengaduan</label>
+                            <input type="text" class="form-control" id="judul" placeholder="Masukan Judul Pengaduan">
+                        </div>
+                        <div class="mb-3">
+                            <label for="kategori" class="form-label">Kategori</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="kategori" placeholder="tulis Kategori">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="deskripsi" class="form-label">Deskripsi</label>
+                            <textarea class="form-control" id="deskripsi" rows="5" placeholder="Jelaskan detail pengaduan"></textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Kirim</button>
+      </div>
+    </div>
+  </div>
+</div> 
