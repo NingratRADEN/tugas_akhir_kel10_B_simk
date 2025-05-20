@@ -6,8 +6,8 @@
                 <p class="fs-1 h1">Pembayaran</p>
                 <div class="user-profile">
                     <div class="text-end me-2">
-                        <h5 class="mb-0">Angel</h5>
-                        <small>Kamar 20</small>
+                        <h5 class="mb-0"><?php echo $_SESSION['user']['nama'] ?></h5>
+                        <small>Kamar <?php echo $_SESSION['user']['idkamar'] ?></small>
                     </div>
                     <div class="profile-pic"><i class="fa-solid fa-circle-user"></i></div>
                 </div>
@@ -21,9 +21,8 @@
                 </div>
                     <p>Pembayaran terakhir: 03 Januari 2025 (Sewa bulan Januari 2025)</p>
                     <p>Pembayaran berikutnya: 01 Februari 2025</p>
-                    <a href="#" class="btn btn-pay">Bayar Sewa Bulan Februari 2025</a>
-            </div>
-        </div>
+                </div>
+             </div>
 
         <div class="card">
             <div class="card-body">

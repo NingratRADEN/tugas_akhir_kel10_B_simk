@@ -6,8 +6,8 @@
                 <p class="fs-1 h1">Informasi Kos</p>
                 <div class="user-profile">
                     <div class="text-end me-2">
-                        <h5 class="mb-0">Angel</h5>
-                        <small>Kamar 20</small>
+                        <h5 class="mb-0"><?php echo $_SESSION['user']['nama'] ?></h5>
+                        <small>Kamar <?php echo $_SESSION['user']['idkamar'] ?></small>
                     </div>
                     <div class="profile-pic"><i class="fa-solid fa-circle-user"></i></div>
                 </div>
@@ -113,11 +113,10 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h4 class="lunas-status mb-0">Lunas</h4>
                             <div class="payment-circle">
-                                <i class="bi bi-check-lg"></i>
+                                <i class="fa-solid fa-circle-check"></i>
                             </div>
                         </div>
                         <p class="mb-4">Jatuh Tempo Pada : 1 Februari 2025</p>
-                        <button class="btn btn-action">Bayar Sewa</button>
                     </div>
                 </div>
 

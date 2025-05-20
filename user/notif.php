@@ -6,8 +6,8 @@
                 <p class="fs-1 h1">Notifikasi</p>
                 <div class="user-profile">
                     <div class="text-end me-2">
-                        <h5 class="mb-0">Angel</h5>
-                        <small>Kamar 20</small>
+                        <h5 class="mb-0"><?php echo $_SESSION['user']['nama'] ?></h5>
+                        <small>Kamar <?php echo $_SESSION['user']['idkamar'] ?></small>
                     </div>
                     <div class="profile-pic"><i class="fa-solid fa-circle-user"></i></div>
                 </div>

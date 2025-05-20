@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>SIMK</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <style>
@@ -321,7 +321,7 @@
     <div>
         <ul class="nav flex-column">
             <li class="nav-item fs-1 h5">
-                <a class="nav-link" href="index.php">
+                <a class="nav-link" href="user.php">
                     <i class="fa-solid fa-house"></i>
                     Beranda
                 </a>

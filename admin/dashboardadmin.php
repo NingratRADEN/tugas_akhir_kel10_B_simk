@@ -1,9 +1,27 @@
+<?php
+include('../config/koneksi.php');
+
+// --- Ambil data user ---
+$user_id = $_SESSION['user'] ?? null;
+
+if ($user_id) {
+    $query = "SELECT * FROM tbl_user WHERE iduser = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+} else {
+    // Redirect atau tampilkan pesan error jika belum login
+    die("Anda belum login.");
+}
+?>
 <!-- Content -->
 <div class="content">
     <div class="container">
         <nav class="navbar bg-body-tertiary">
             <div class="container-fluid">
-                <p class="fs-1 h1">Selamat Datang, Admin</p>
+                <p class="fs-1 h1">Selamat Datang, <?php echo $_SESSION['user']['nama'] ?></p>
                 <div class="user-profile">
                     <div class="profile-pic"><i class="fa-solid fa-circle-user"></i></div>
                 </div>

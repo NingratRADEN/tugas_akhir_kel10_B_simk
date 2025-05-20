@@ -1,9 +1,9 @@
 <?php 
 session_start();
-
-// Check if user is logged in and is an admin
-if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'user') {
-    header("Location: ../login.php");
+if (!isset($_SESSION['user'])) {
+  // jika user belum login
+  header('Location: ./login.php');
+  exit();
 }
 include "header.php";
    
