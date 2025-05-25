@@ -32,7 +32,11 @@ while ($row = $result_stat->fetch_assoc()) {
                         <h5 class="mb-0"><?php echo $user['nama'] ?></h5>
                         <small>Kamar <?php echo $user['idkamar'] ?></small>
                     </div>
-                    <div class="profile-pic"><i class="fa-solid fa-circle-user"></i></div>
+                    <a href="?menu=5" style="text-decoration: none; color: inherit;">
+                        <div class="profile-pic">
+                            <i class="fa-solid fa-circle-user"></i>
+                        </div>
+                    </a>
                 </div>
             </div>
         </nav>

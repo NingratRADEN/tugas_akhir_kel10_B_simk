@@ -301,9 +301,9 @@
         }
         .btn-danger {
             border: none;
-            border-radius: 25px;
+            border-radius: 5px;
             padding: 6px 12px;
-            color: black;
+            color: white;
         }
     </style>
 </head>

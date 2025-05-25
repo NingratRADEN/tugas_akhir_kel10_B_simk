@@ -18,7 +18,11 @@ $userList = $result_user->fetch_all(MYSQLI_ASSOC);
                     <div class="text-end me-2">
                         <h5 class="mb-0"><?php echo $_SESSION['user']['nama'] ?></h5>
                     </div>
-                    <div class="profile-pic"><i class="fa-solid fa-circle-user"></i></div>
+                    <a href="?menu=5" style="text-decoration: none; color: inherit;">
+                        <div class="profile-pic">
+                            <i class="fa-solid fa-circle-user"></i>
+                        </div>
+                    </a>
                 </div>
             </div>
         </nav>
@@ -28,7 +32,7 @@ $userList = $result_user->fetch_all(MYSQLI_ASSOC);
             <div class="col-md-4">
                 <div class="profile-card text-center">
                     <div class="profile-picture">
-                        <span>O</span>
+                        <span><i class="fa-solid fa-circle-user"></i></span>
                     </div>
                     <h3 class="profile-name"><?= htmlspecialchars($adminList[0]['nama']) ?></h3>
                     <p class="profile-room">Pemilik Kos</p>

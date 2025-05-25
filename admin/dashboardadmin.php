@@ -48,7 +48,11 @@ $notifikasi_masuk = $pembayaran_masuk + $pengaduan_masuk;
             <div class="container-fluid">
                 <p class="fs-1 h1">Selamat Datang, <?php echo $_SESSION['user']['nama'] ?></p>
                 <div class="user-profile">
-                    <div class="profile-pic"><i class="fa-solid fa-circle-user"></i></div>
+                    <a href="?menu=5" style="text-decoration: none; color: inherit;">
+                        <div class="profile-pic">
+                            <i class="fa-solid fa-circle-user"></i>
+                        </div>
+                    </a>
                 </div>
             </div>
         </nav>

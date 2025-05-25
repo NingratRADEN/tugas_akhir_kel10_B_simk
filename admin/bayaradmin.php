@@ -19,7 +19,11 @@ $result = $conn->query($query);
                     <div class="text-end me-2">
                         <h5 class="mb-0"><?= $_SESSION['user']['nama'] ?></h5>
                     </div>
-                    <div class="profile-pic"><i class="fa-solid fa-circle-user"></i></div>
+                    <a href="?menu=5" style="text-decoration: none; color: inherit;">
+                        <div class="profile-pic">
+                            <i class="fa-solid fa-circle-user"></i>
+                        </div>
+                    </a>
                 </div>
             </div>
         </nav>
