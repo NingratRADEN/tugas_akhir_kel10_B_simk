@@ -1,4 +1,5 @@
 <?php 
+include('../config/koneksi.php');
 session_start();
 if (!isset($_SESSION['user'])) {
   // jika user belum login
@@ -20,8 +21,9 @@ include "header.php";
             include "infokos.php";
         }else if($_GET['menu']==5){
             include "profile.php";
-        }
-        else{
+        }else if($_GET['menu']==6){
+            include "edituser.php";
+        }else{
             echo "Pilih Menu";
         }
     }else{

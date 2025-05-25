@@ -15,6 +15,31 @@ if ($user_id) {
     // Redirect atau tampilkan pesan error jika belum login
     die("Anda belum login.");
 }
+
+// Ambil semua data pembayaran
+$query = "SELECT b.idbayar, u.nama, k.idkamar, b.jumlah, b.keterangan, b.metode, b.tanggalbayar, b.status, u.waktu_sewa
+          FROM tbl_bayar b
+          JOIN tbl_user u ON b.iduser = u.iduser
+          JOIN tbl_infokos k ON b.idkamar = k.idkamar
+          ORDER BY b.tanggalbayar DESC";
+$result = $conn->query($query);
+
+// 1. Jumlah pembayaran masuk (status: Pending)
+$stmt = $conn->prepare("SELECT COUNT(*) as total FROM tbl_bayar WHERE status = 'Belum Diverifikasi'");
+$stmt->execute();
+$res = $stmt->get_result();
+$pembayaran_masuk = $res->fetch_assoc()['total'];
+$stmt->close();
+
+// 2. Jumlah pengaduan masuk (status: Baru)
+$stmt = $conn->prepare("SELECT COUNT(*) as total FROM tbl_pengaduan WHERE status = 'Menunggu Verifikasi'");
+$stmt->execute();
+$res = $stmt->get_result();
+$pengaduan_masuk = $res->fetch_assoc()['total'];
+$stmt->close();
+
+// 3. Notifikasi masuk (jumlah aktivitas terbaru: pembayaran & pengaduan)
+$notifikasi_masuk = $pembayaran_masuk + $pengaduan_masuk;
 ?>
 <!-- Content -->
 <div class="content">
@@ -31,8 +56,8 @@ if ($user_id) {
             <div class="col-md-3">
                 <div class="card text-white bg-success mb-3">
                     <div class="card-body">
-                        <h5 class="card-title">Status Pembayaran</h5>
-                        <p class="card-text">1 penghuni jatuh tempo</p>
+                        <h5 class="card-title">Pembayaran</h5>
+                        <p class="card-text"><?= $pembayaran_masuk ?> pembayaran masuk</p>
                     </div>
                 </div>
             </div>
@@ -40,7 +65,7 @@ if ($user_id) {
                 <div class="card text-white bg-info mb-3">
                     <div class="card-body">
                         <h5 class="card-title">Pengaduan</h5>
-                        <p class="card-text">1 Pengaduan Selesai</p>
+                        <p class="card-text"><?= $pengaduan_masuk ?> Pengaduan masuk</p>
                     </div>
                 </div>
             </div>
@@ -48,7 +73,7 @@ if ($user_id) {
                 <div class="card text-white bg-warning mb-3">
                     <div class="card-body">
                         <h5 class="card-title">Notifikasi</h5>
-                        <p class="card-text">1 Notifikasi Belum Di Baca</p>
+                        <p class="card-text"><?= $notifikasi_masuk ?> Notifikasi masuk</p>
                     </div>
                 </div>
             </div>
@@ -58,6 +83,7 @@ if ($user_id) {
         <table class="table table-bordered">
             <thead>
                 <tr>
+                    <th>Tanggal Bayar</th>
                     <th>Kamar</th>
                     <th>Nama Penghuni</th>
                     <th>Waktu Sewa</th>
@@ -65,24 +91,20 @@ if ($user_id) {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>user</td>
-                    <td>1 bulan</td>
-                    <td class="text-success">Lunas</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>user</td>
-                    <td>6 Bulan</td>
-                    <td class="text-success">Lunas</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>1 tahun</td>
-                    <td>Rp. 700.000</td>
-                    <td class="text-success">Lunas</td>
-                </tr>
+                <?php while ($row = $result->fetch_assoc()): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($row['tanggalbayar']) ?></td>
+                        <td><?= htmlspecialchars($row['idkamar']) ?></td>
+                        <td><?= htmlspecialchars($row['nama']) ?></td>
+                        <td><?= htmlspecialchars($row['waktu_sewa']) ?></td>
+                        <td class="<?= $row['status'] == 'Lunas' ? 'text-success' : 'text-warning' ?>">
+                            <?= htmlspecialchars($row['status']) ?>
+                        </td>
+                    </tr>
+                <?php endwhile; ?>
+                <?php if ($result->num_rows == 0): ?>
+                    <tr><td colspan="5" class="text-center">Tidak ada data pembayaran.</td></tr>
+                <?php endif; ?>
             </tbody>
         </table>
     </div>

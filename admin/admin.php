@@ -1,4 +1,5 @@
 <?php 
+
 session_start();
 if (!isset($_SESSION['user'])) {
   // jika user belum login
@@ -20,8 +21,11 @@ include "header.php";
             include "infokosadmin.php";
         }else if($_GET['menu']==5){
             include "profileadmin.php";
-        }
-        else{
+        }else if($_GET['menu']==6){
+            include "detailuseradmin.php";
+        }else if($_GET['menu']==7){
+            include "updateuser.php";
+        }else{
             echo "Pilih Menu";
         }
     }else{

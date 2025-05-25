@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('./config/koneksi.php');
+include('../config/koneksi.php');
 
 // Ambil data dari form login
 $username_user = htmlspecialchars($_POST['email']);
@@ -13,13 +13,18 @@ $data_user = mysqli_fetch_assoc($hasil);
 
 // Cek apakah data user ditemukan
 if ($data_user != null) {
+    //$_SESSION['user'] = $data_user;
+    // Simpan ID user saja dulu ke session
+    $_SESSION['user_id'] = $data_user['iduser'];
+
+    // Simpan data user lengkap ke session (jika ingin langsung pakai)
     $_SESSION['user'] = $data_user;
 
     // Redirect berdasarkan role
     if ($data_user['role'] == 'admin') {
-        header('Location: ./admin/admin.php');
+        header('Location: ../admin/admin.php');
     } elseif ($data_user['role'] == 'user') {
-        header('Location: ./user/user.php');
+        header('Location: ../user/user.php');
     } else {
         // Jika role tidak dikenali
         echo "<script>alert('Role tidak dikenali'); window.location.href='./login.php';</script>";

@@ -1,116 +1,40 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update User</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .sidebar {
-            height: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 100;
-            padding: 20px 50px 0;
-            background-color: #f8f9fa;
-        }
-        .sidebar a {
-            color: #343a40;
-        }
-        .content {
-            margin-left: 250px;
-            padding: 20px;
-        }
-        .user-profile {
-            display: flex;
-            align-items: center;
-        }
-        .profile-pic {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #000;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-left: 10px;
-        }
-        .card {
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        .form-section {
-            padding: 20px;
-        }
-        .update-btn {
-            background-color: #5DDFBD;
-            border: none;
-            float: right;
-        }
-        .form-control, .form-select {
-            font-size: 14px;
-            padding: 8px 12px;
-            border-color: #ddd;
-            border-radius: 4px;
-        }
-    </style>
-</head>
-<body>
+<?php
+include('../config/koneksi.php');
 
-<!-- Sidebar -->
-<div class="sidebar d-flex flex-column justify-content-between border border-start-0 border-top-0 border-buttom-0">
-    <h2 class="text-black text-center">SIMK</h2>
-    <div>
-        <ul class="nav flex-column">
-            <li class="nav-item fs-1 h5">
-                <a class="nav-link" href="#">
-                    <i class="fa-solid fa-house"></i>
-                    Beranda
-                </a>
-            </li>
-            <li class="nav-item fs-1 h5">
-                <a class="nav-link" href="#">
-                    <i class="fa-solid fa-bell"></i>
-                    Notifikasi
-                </a>
-            </li>
-            <li class="nav-item fs-1 h5">
-                <a class="nav-link" href="#">
-                    <i class="fa-solid fa-wallet"></i>
-                    Pembayaran
-                </a>
-            </li>
-            <li class="nav-item fs-1 h5">
-                <a class="nav-link" href="#">
-                    <i class="fa-solid fa-person-circle-exclamation"></i>
-                    Pengaduan
-                </a>
-            </li>
-            <li class="nav-item fs-1 h5">
-                <a class="nav-link" href="#">
-                    <i class="fa-solid fa-circle-info"></i>
-                    Informasi Kos
-                </a>
-            </li>
-        </ul>
-    </div>    
-    <ul class="nav flex-column">
-        <li class="nav-item fs-1 h5">
-            <a class="nav-link" href="#">
-                <i class="fa-solid fa-user"></i>
-                Profile
-            </a>
-        </li>
-    </ul>
-</div>
+//Tangkap iduser
+if (!isset($_GET['iduser'])) {
+    die("ID user tidak diberikan.");
+}
+$iduser = (int) $_GET['iduser'];
 
+$sql = "
+  SELECT u.*, k.idkamar, k.no_kamar, k.tipe, k.harga
+  FROM tbl_user u
+  LEFT JOIN tbl_infokos k ON u.iduser = k.iduser
+  WHERE u.iduser = ?
+";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $iduser);
+$stmt->execute();
+$res = $stmt->get_result();
+if ($res->num_rows===0) die("User tidak ditemukan.");
+$data = $res->fetch_assoc();
+$stmt->close();
+
+// Ambil daftar kamar: yang kosong + kamar user ini
+$sql2 = "
+  SELECT idkamar, no_kamar, tipe, harga
+  FROM tbl_infokos
+  WHERE iduser IS NULL OR iduser = ?
+  ORDER BY no_kamar
+";
+$stmt = $conn->prepare($sql2);
+$stmt->bind_param("i", $iduser);
+$stmt->execute();
+$res2 = $stmt->get_result();
+$rooms = $res2->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
+?>
 <!-- Content -->
 <div class="content">
     <div class="container">
@@ -119,7 +43,7 @@
                 <p class="fs-1 h1">Informasi Kos</p>
                 <div class="user-profile">
                     <div class="text-end me-2">
-                        <h5 class="mb-0">Admin</h5>
+                        <h5 class="mb-0"><?php echo $_SESSION['user']['nama'] ?></h5>
                     </div>
                     <div class="profile-pic"><i class="fa-solid fa-circle-user"></i></div>
                 </div>
@@ -130,65 +54,70 @@
         <div class="card">
             <div class="card-body">
                 <h3 class="card-title mb-4">Edit User</h3>
-                <form>
+                <form action="proses_update_user.php?iduser=<?= $iduser ?>" method="POST">
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="namaLengkap" class="form-label">Nama Lengkap</label>
-                            <input type="text" class="form-control" id="namaLengkap" value="User">
+                            <input type="text" class="form-control" name="namaLengkap" value="<?= htmlspecialchars($data['nama']) ?>">
                         </div>
                         <div class="col-md-6">
                             <label for="tanggalLahir" class="form-label">Tanggal Lahir</label>
-                            <input type="text" class="form-control" id="tanggalLahir" value="01/01/2000">
+                            <input type="date" class="form-control" name="tanggalLahir" value="<?= htmlspecialchars($data['tanggal_lahir']) ?>">
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="jenisKelamin" class="form-label">Jenis Kelamin</label>
-                            <input type="text" class="form-control" id="jenisKelamin" value="Perempuan">
+                            <input type="text" class="form-control" name="jenisKelamin" value="<?= htmlspecialchars($data['jenis_kelamin']) ?>">
                         </div>
                         <div class="col-md-6">
                             <label for="alamat" class="form-label">Alamat</label>
-                            <input type="text" class="form-control" id="alamat" value="Jl. Jalan no.2 bandung barat, bandung">
+                            <input type="text" class="form-control" name="alamat" value="<?= htmlspecialchars($data['alamat']) ?>">
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="pekerjaan" class="form-label">Pekerjaan</label>
-                            <input type="text" class="form-control" id="pekerjaan" value="Mahasiswa">
+                            <input type="text" class="form-control" name="pekerjaan" value="<?= htmlspecialchars($data['pekerjaan']) ?>">
                         </div>
                         <div class="col-md-6">
                             <label for="nomorHandphone" class="form-label">Nomor Handphone</label>
-                            <input type="text" class="form-control" id="nomorHandphone" value="08123456789">
+                            <input type="text" class="form-control" name="nomorHandphone" value="<?= htmlspecialchars($data['No_handphone']) ?>">
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="tanggalMasuk" class="form-label">Tanggal Masuk</label>
-                            <input type="text" class="form-control" id="tanggalMasuk" value="01/02/2022">
+                            <input type="date" class="form-control" name="tanggalMasuk" value="<?= htmlspecialchars($data['tanggal_masuk_kos']) ?>">
                         </div>
                         <div class="col-md-6">
                             <label for="waktuSewa" class="form-label">Waktu Sewa</label>
-                            <select class="form-select" id="waktuSewa">
-                                <option selected>1 bulan</option>
-                                <option>3 bulan</option>
-                                <option>6 bulan</option>
-                                <option>12 bulan</option>
+                            <select class="form-select form-control" name="waktuSewa">
+                                <?php foreach(['1 bulan','3 bulan','6 bulan','12 bulan'] as $opt): ?>
+                                    <option value="<?= $opt ?>"
+                                        <?= $data['waktu_sewa']==$opt?'selected':'' ?>>
+                                        <?= $opt ?>
+                                    </option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="noKamar" class="form-label">No Kamar / Tipe Kamar</label>
-                            <select class="form-select" id="noKamar">
-                                <option selected>20 / Standar</option>
-                                <option>21 / Standar</option>
-                                <option>22 / Premium</option>
-                                <option>23 / Premium</option>
+                            <select class="form-select form-control" id="idkamar" name="idkamar">
+                               <?php foreach($rooms as $r): ?>
+                                    <option value="<?= $r['idkamar'] ?>"
+                                        data-harga="<?= $r['harga'] ?>"
+                                        <?= $data['idkamar']==$r['idkamar']?'selected':'' ?>>
+                                        <?= $r['no_kamar'] ?> / <?= ucfirst($r['tipe']) ?>
+                                    </option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="col-md-6">
                             <label for="biayaSewa" class="form-label">Biaya Sewa</label>
-                            <input type="text" class="form-control" id="biayaSewa" value="700.000">
+                            <input type="text" class="form-control" id="biayaSewa" name="biayaSewa" value="<?= number_format($data['harga'],0,',','.') ?>" readonly>
                         </div>
                     </div>
 
@@ -196,16 +125,16 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" value="user1@gmail.com">
+                            <input type="email" class="form-control" name="email" value="<?= htmlspecialchars($data['email']) ?>">
                         </div>
                         <div class="col-md-6">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" value="123456789">
+                            <input type="text" class="form-control" name="password" value="<?= htmlspecialchars($data['password']) ?>">
                         </div>
                     </div>
 
                     <div class="text-end mt-4">
-                        <button type="submit" class="btn btn-primary update-btn">Update user</button>
+                        <button type="submit" class="btn btn-edit">Update user</button>
                     </div>
                 </form>
             </div>
@@ -213,8 +142,25 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const kamarSelect = document.getElementById('idkamar');
+    const biayaSewaInput = document.getElementById('biayaSewa');
+
+    kamarSelect.addEventListener('change', function () {
+        const selectedOption = kamarSelect.selectedOptions[0];
+        const harga = selectedOption.getAttribute('data-harga') || 0;
+
+        const hargaFormatted = parseInt(harga).toLocaleString('id-ID', {
+            style: 'currency',
+            currency: 'IDR'
+        });
+
+        biayaSewaInput.value = hargaFormatted;
+    });
+
+    // Trigger saat pertama load (biar update harga sesuai select awal)
+    kamarSelect.dispatchEvent(new Event('change'));
+});
+
+</script>

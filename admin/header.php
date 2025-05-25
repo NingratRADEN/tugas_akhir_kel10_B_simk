@@ -147,7 +147,7 @@
             background-color: #8ee4cf;
             color: #000;
             border: none;
-            border-radius: 20px;
+            border-radius: 5px;
             padding: 8px 20px;
         }
         .btn-detail {
@@ -239,6 +239,71 @@
         .payment-status {
             color: #4cd137;
             font-weight: 500;
+        }
+        .card {
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+        }
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid #e9e9e9;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card-header h5 {
+            margin: 0;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .form-header {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9e9e9;
+            font-weight: bold;
+        }
+        .form-container {
+            padding: 15px;
+        }
+        .form-label {
+            font-size: 14px;
+            font-weight: normal;
+            margin-bottom: 5px;
+        }
+        .form-control {
+            font-size: 14px;
+            padding: 6px 12px;
+            border-color: #ddd;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+        .btn-edit {
+            background-color: #5abeaa;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            font-size: 14px;
+            border-radius: 15px;
+        }
+        .active-menu {
+            background-color: #f5f5f5;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        .footer {
+            text-align: right;
+            padding: 10px 0;
+        }
+        .btn-danger {
+            border: none;
+            border-radius: 25px;
+            padding: 6px 12px;
+            color: black;
         }
     </style>
 </head>

@@ -1,3 +1,22 @@
+<?php
+$user_id = $_SESSION['user']['iduser'];
+$user = getUserKosInfo($conn, $user_id);
+
+if (!$user) {
+    die("Data kos tidak ditemukan.");
+}
+
+// Ambil riwayat pembayaran
+$stmt_hist = $conn->prepare("
+    SELECT tanggalbayar, keterangan, metode, jumlah, status
+    FROM tbl_bayar
+    WHERE iduser = ?
+    ORDER BY tanggalbayar DESC
+");
+$stmt_hist->bind_param("i", $user['iduser']);
+$stmt_hist->execute();
+$res_hist = $stmt_hist->get_result();
+?>
 <!-- Content -->
 <div class="content">
     <div class="container">
@@ -6,8 +25,8 @@
                 <p class="fs-1 h1">Informasi Kos</p>
                 <div class="user-profile">
                     <div class="text-end me-2">
-                        <h5 class="mb-0"><?php echo $_SESSION['user']['nama'] ?></h5>
-                        <small>Kamar <?php echo $_SESSION['user']['idkamar'] ?></small>
+                        <h5 class="mb-0"><?php echo $user['nama'] ?></h5>
+                        <small>Kamar <?php echo $user['idkamar'] ?></small>
                     </div>
                     <div class="profile-pic"><i class="fa-solid fa-circle-user"></i></div>
                 </div>
@@ -27,33 +46,33 @@
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <p class="text-muted mb-1">Nomor Kamar</p>
-                                <h5>20</h5>
+                                <h5><?php echo $user['idkamar'] ?></h5>
                             </div>
                             <div class="col-md-6">
                                 <p class="text-muted mb-1">Tipe Kamar</p>
-                                <h5>Standar</h5>
+                                <h5><?php echo $user['tipe'] ?></h5>
                             </div>
                         </div>
                         
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <p class="text-muted mb-1">Tanggal Masuk</p>
-                                <h5>1 Januari 2025</h5>
+                                <h5><?php echo $user ['tanggal_masuk_kos'] ?></h5>
                             </div>
                             <div class="col-md-6">
                                 <p class="text-muted mb-1">Tanggal Jatuh Tempo</p>
-                                <h5>1 Februari 2025</h5>
+                                <h5><?php echo $user ['tanggal_jatuh_tempo'] ?></h5>
                             </div>
                         </div>
                         
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <p class="text-muted mb-1">Durasi Sewa</p>
-                                <h5>1 bulan</h5>
+                                <h5><?php echo $user['waktu_sewa'] ?></h5>
                             </div>
                             <div class="col-md-6">
                                 <p class="text-muted mb-1">Harga Sewa</p>
-                                <h5>Rp. 700.000</h5>
+                                <h5>Rp. <?= number_format($user['harga'], 0, ',', '.') ?></h5>
                             </div>
                         </div>
                         
@@ -77,24 +96,20 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php if ($res_hist->num_rows): ?>
+                                    <?php while ($row_hist = $res_hist->fetch_assoc()): ?>
+                                        <tr>
+                                            <td><?= date('d/m/Y', strtotime($row_hist['tanggalbayar'])) ?></td>
+                                            <td><?= htmlspecialchars($row_hist['keterangan']) ?></td>
+                                            <td>Rp. <?= number_format($row_hist['jumlah'], 0, ',', '.') ?></td>
+                                            <td class="<?= $row_hist['status']=='Lunas' ? 'text-success' : 'text-warning' ?>"><?= htmlspecialchars($row_hist['status']) ?></td>
+                                        </tr>
+                                    <?php endwhile; ?>
+                                <?php else: ?>
                                 <tr>
-                                    <td>01/01/2025</td>
-                                    <td>Sewa Kamar Januari 2025</td>
-                                    <td>Rp. 700.000</td>
-                                    <td class="lunas-status">Lunas</td>
+                                    <td colspan="5" class="text-center">Belum ada riwayat pembayaran.</td>
                                 </tr>
-                                <tr>
-                                    <td>01/02/2025</td>
-                                    <td>Sewa Kamar Februari 2025</td>
-                                    <td>Rp. 700.000</td>
-                                    <td class="lunas-status">Lunas</td>
-                                </tr>
-                                <tr>
-                                    <td>01/03/2025</td>
-                                    <td>Sewa Kamar Maret 2025</td>
-                                    <td>Rp. 700.000</td>
-                                    <td class="lunas-status">Lunas</td>
-                                </tr>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
@@ -111,12 +126,20 @@
                     <div class="info-card-body">
                         <p class="text-muted mb-1">Periode Bulan Ini</p>
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="lunas-status mb-0">Lunas</h4>
+                            <?php
+                            $last_status = null;
+                            $res_hist->data_seek(0); // Reset pointer ke awal hasil
+                            if ($res_hist->num_rows > 0) {
+                                $first_row = $res_hist->fetch_assoc();
+                                $last_status = $first_row['status'];
+                            }
+                            ?>
+                            <h4 class="lunas-status mb-0"><?= htmlspecialchars($last_status ?? 'Belum ada data') ?></h4>
                             <div class="payment-circle">
                                 <i class="fa-solid fa-circle-check"></i>
                             </div>
                         </div>
-                        <p class="mb-4">Jatuh Tempo Pada : 1 Februari 2025</p>
+                        <p class="mb-4">Jatuh Tempo Pada : <?php echo $user ['tanggal_jatuh_tempo'] ?></p>
                     </div>
                 </div>
 

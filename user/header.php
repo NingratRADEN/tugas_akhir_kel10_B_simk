@@ -311,6 +311,41 @@
             color: #4cd137;
             font-weight: 500;
         }
+        .profile-container {
+            margin: 0 auto;
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .form-title {
+            font-weight: bold;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e9e9e9;
+            margin-bottom: 15px;
+        }
+        .form-label {
+            color: #555;
+            margin-bottom: 4px;
+        }
+        .form-control {
+            padding: 6px 12px;
+            border-color: #e9e9e9;
+        }
+        .btn-update {
+            background-color: #00af66;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            font-size: 14px;
+            border-radius: 15px;
+        }
+        .form-section {
+            margin-bottom: 15px;
+        }
+        .primary-footer {
+            text-align: right;
+            padding: 10px 20px;
+        }
     </style>
 </head>
 <body>

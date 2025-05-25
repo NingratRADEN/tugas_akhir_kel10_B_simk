@@ -8,7 +8,7 @@
     <title>SIMK - Login</title>
     <style>
         body {
-            background-image: url('bgkosan.png');
+            background-image: url('../assets/bgkosan.png');
             background-size: cover;
             background-repeat: no-repeat;
             height: 100vh;
